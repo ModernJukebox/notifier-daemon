@@ -1,0 +1,10 @@
+{
+  "dsn": "https://localhost?topic[]=%2Fexample%2Ftopic&topic[]=%2Fexample%2Ftopic%2Fsubtopic",
+  "authentication": {
+    "type": "bearer",
+    "token": "test"
+  },
+  "tick": "4s",
+  "command": "date",
+  "args": ["+DATE: %Y-%m-%d TIME: %H:%M:%S"]
+}
