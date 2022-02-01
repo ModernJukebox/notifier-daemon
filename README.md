@@ -5,3 +5,5 @@ You can configure the interval at which the daemon sends data to the server and 
 It uses http post requests to send the data to the server.
 
 Basically, it is a simple http client that sends continuously data to the server.
+
+Data will only be sent if the data is different from the last data sent.
