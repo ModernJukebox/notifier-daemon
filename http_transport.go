@@ -57,7 +57,7 @@ func (transport *HttpTransport) Send(data string) error {
 }
 
 func (transport *HttpTransport) beforeSend(request *http.Request) error {
-	request.Header.Add("User-Agent", "NotifierDaemon/0.1.0-DEV")
+	request.Header.Add("User-Agent", "notifier-daemon/0.1.0-DEV")
 
 	(*transport.authenticationStrategy).Authenticate(request)
 
