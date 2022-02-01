@@ -16,19 +16,18 @@ type Configuration struct {
 	Authentication AuthenticationConfiguration `json:"authentication"`
 	Tick           Duration                    `json:"tick,omitempty"`
 	Command        string                      `json:"command"`
-	Args           []string                    `json:"args"`
 
 	authenticationStrategy *HttpStrategy
 	Transport              *Transport
 }
 
 func (config *Configuration) LoadConfig(args []string) error {
-	if len(args) == 0 {
-		return fmt.Errorf("no config file specified")
+	if len(args) <= 1 {
+		return fmt.Errorf("no config file specified (example: ./notifier-daemon config.json)")
 	}
 
 	if len(args) > 2 {
-		return fmt.Errorf("too many arguments")
+		return fmt.Errorf("too many arguments (example: ./notifier-daemon config.json)")
 	}
 
 	configFile := args[1]
@@ -36,7 +35,7 @@ func (config *Configuration) LoadConfig(args []string) error {
 	jsonFile, err := os.Open(configFile)
 
 	if err != nil {
-		return nil
+		return err
 	}
 
 	defer func(jsonFile *os.File) {

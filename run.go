@@ -5,7 +5,7 @@ import (
 )
 
 func ExecuteCommand(config *Configuration) (string, error) {
-	cmd := exec.Command(config.Command, config.Args...)
+	cmd := exec.Command("sh", "-c", config.Command)
 
 	output, err := cmd.CombinedOutput()
 
