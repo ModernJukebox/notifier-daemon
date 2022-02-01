@@ -14,7 +14,7 @@ RUN go mod download
 
 COPY *.go ./
 
-RUN GO111MODULE=on CGO_ENABLED=0 go build -o /go/bin/notifier-daemon
+RUN CGO_ENABLED=0 go build -o /go/bin/notifier-daemon
 
 ##
 ## Run Stage
