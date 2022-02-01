@@ -9,6 +9,10 @@ import (
 	"time"
 )
 
+type DataStorage struct {
+	data string
+}
+
 func Run(ctx context.Context, config *Configuration, stdout io.Writer) error {
 	log.SetOutput(stdout)
 
@@ -18,7 +22,9 @@ func Run(ctx context.Context, config *Configuration, stdout io.Writer) error {
 		return err
 	}
 
-	if err := execute(config); err != nil {
+	storage := &DataStorage{}
+
+	if err := execute(config, storage); err != nil {
 		return err
 	}
 
@@ -27,14 +33,14 @@ func Run(ctx context.Context, config *Configuration, stdout io.Writer) error {
 		case <-ctx.Done():
 			return nil
 		case <-time.Tick(time.Duration(config.Tick)):
-			if err := execute(config); err != nil {
+			if err := execute(config, storage); err != nil {
 				return err
 			}
 		}
 	}
 }
 
-func execute(config *Configuration) error {
+func execute(config *Configuration, storage *DataStorage) error {
 	data, err := ExecuteCommand(config)
 
 	if err != nil {
@@ -43,11 +49,18 @@ func execute(config *Configuration) error {
 
 	data = strings.TrimSpace(data)
 
+	// If the data is the same, don't do anything
+	if storage.data == data {
+		return nil
+	}
+
 	err = (*config.Transport).Send(data)
 
 	if err != nil {
 		return err
 	}
+
+	storage.data = data
 
 	return nil
 }
