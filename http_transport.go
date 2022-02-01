@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -42,6 +43,16 @@ func (transport *HttpTransport) Send(data string) error {
 		return err
 	}
 
+	if isJSON(data) {
+		request.Header.Add("Content-Type", "application/json")
+	}
+
+	err = transport.beforeSend(request)
+
+	if err != nil {
+		return err
+	}
+
 	client := &http.Client{}
 	response, err := client.Do(request)
 
@@ -62,4 +73,9 @@ func (transport *HttpTransport) beforeSend(request *http.Request) error {
 	(*transport.authenticationStrategy).Authenticate(request)
 
 	return nil
+}
+
+func isJSON(str string) bool {
+	var js json.RawMessage
+	return json.Unmarshal([]byte(str), &js) == nil
 }
