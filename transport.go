@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"net/http"
 	"net/url"
 )
 
@@ -25,6 +24,5 @@ func NewTransport(u *url.URL, authenticationStrategy *HttpStrategy) (Transport, 
 }
 
 type Transport interface {
-	beforeSend(request *http.Request) error
 	Send(data string) error
 }

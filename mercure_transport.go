@@ -12,11 +12,16 @@ func init() {
 
 func MercureTransportFactory(u *url.URL, authenticationStrategy *HttpStrategy) (Transport, error) {
 	q := u.Query()
+	isPrivate := false
 
-	isPrivate, err := strconv.ParseBool(q.Get("private"))
+	if q.Has("private") {
+		private, err := strconv.ParseBool(q.Get("private"))
 
-	if err != nil {
-		return nil, err
+		if err != nil {
+			return nil, err
+		}
+
+		isPrivate = private
 	}
 
 	topics := make([]string, len(q["topic"]))
@@ -50,7 +55,17 @@ func NewMercureTransport(private bool, topics []string, u *url.URL, authenticati
 
 	u.Path = "/.well-known/mercure"
 
-	httpTransport, _ := NewHttpTransport(u, authenticationStrategy)
+	httpTransport, err := NewHttpTransport(u, authenticationStrategy)
+
+	if err != nil {
+		return nil, err
+	}
+
+	httpTransport.beforeSend = func(request *http.Request) error {
+		request.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+
+		return nil
+	}
 
 	return &MercureTransport{
 		private:       private,
@@ -73,16 +88,4 @@ func (transport *MercureTransport) Send(data string) error {
 	}
 
 	return transport.httpTransport.Send(form.Encode())
-}
-
-func (transport *MercureTransport) beforeSend(request *http.Request) error {
-	err := transport.httpTransport.beforeSend(request)
-
-	if err != nil {
-		return err
-	}
-
-	request.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-
-	return nil
 }

@@ -26,6 +26,8 @@ func HttpTransportFactory(u *url.URL, authenticationStrategy *HttpStrategy) (Tra
 type HttpTransport struct {
 	serverUrl *url.URL
 
+	beforeSend func(req *http.Request) error
+
 	authenticationStrategy *HttpStrategy
 }
 
@@ -47,10 +49,16 @@ func (transport *HttpTransport) Send(data string) error {
 		request.Header.Add("Content-Type", "application/json")
 	}
 
-	err = transport.beforeSend(request)
+	request.Header.Add("User-Agent", "notifier-daemon/0.1.0-DEV")
 
-	if err != nil {
-		return err
+	(*transport.authenticationStrategy).Authenticate(request)
+
+	if transport.beforeSend != nil {
+		err = transport.beforeSend(request)
+
+		if err != nil {
+			return fmt.Errorf("beforeSend failed: %s", err)
+		}
 	}
 
 	client := &http.Client{}
@@ -63,14 +71,6 @@ func (transport *HttpTransport) Send(data string) error {
 	if 200 > response.StatusCode || response.StatusCode >= 300 {
 		return fmt.Errorf("failed to send notification: %s", response.Status)
 	}
-
-	return nil
-}
-
-func (transport *HttpTransport) beforeSend(request *http.Request) error {
-	request.Header.Add("User-Agent", "notifier-daemon/0.1.0-DEV")
-
-	(*transport.authenticationStrategy).Authenticate(request)
 
 	return nil
 }
