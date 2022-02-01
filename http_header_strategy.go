@@ -19,7 +19,7 @@ func HttpHeaderStrategyFactory(config *AuthenticationConfiguration) (HttpStrateg
 }
 
 func (strategy *HttpHeaderStrategy) Authenticate(request *http.Request) {
-	request.Header.Set(strategy.token, strategy.token)
+	request.Header.Set(strategy.headerName, strategy.token)
 }
 
 func NewHttpHeaderStrategy(headerName string, token string) (*HttpHeaderStrategy, error) {
