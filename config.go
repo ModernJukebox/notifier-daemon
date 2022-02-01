@@ -58,10 +58,6 @@ func (config *Configuration) LoadConfig(args []string) error {
 		config.Tick = defaultTick
 	}
 
-	if config.Tick < Duration(time.Millisecond*20) {
-		return fmt.Errorf("tick must be greater than 20 milliseconds")
-	}
-
 	dsn, err := url.Parse(config.DSN)
 
 	if err != nil {

@@ -26,8 +26,6 @@ app.post("/notify", (req, res) => {
     const data = req.body;
     const id = getNextId();
 
-    console.log(req.headers);
-
     const notification = {
         date: new Date(),
         topics,

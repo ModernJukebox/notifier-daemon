@@ -4,6 +4,6 @@
     "type": "bearer",
     "token": "test"
   },
-  "tick": "50ms",
+  "tick": "1ns",
   "command": "gdate '+{\"timestamp\": \"%Y-%m-%d %T.%N\"}' | jq -c"
 }
