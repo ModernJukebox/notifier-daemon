@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"io"
 	"log"
 	"os"
@@ -10,7 +11,7 @@ import (
 )
 
 func Run(ctx context.Context, config *Configuration, stdout io.Writer) error {
-	log.SetOutput(os.Stdout)
+	log.SetOutput(stdout)
 
 	err := config.LoadConfig(os.Args)
 
@@ -23,6 +24,8 @@ func Run(ctx context.Context, config *Configuration, stdout io.Writer) error {
 		case <-ctx.Done():
 			return nil
 		case <-time.Tick(time.Duration(config.Tick)):
+
+			fmt.Println("Exec command: " + config.Command)
 
 			data, err := ExecuteCommand(config)
 
