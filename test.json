@@ -1,0 +1,9 @@
+{
+  "dsn": "http://localhost/notify?topic=%2Fexample%2Ftopic&topic=%2Fexample%2Ftopic%2Fsubtopic",
+  "authentication": {
+    "type": "bearer",
+    "token": "test"
+  },
+  "tick": "4s",
+  "command": "date '+{\"timestamp\": \"%Y-%m-%d TIME: %H:%M:%S\"}' | jq -c"
+}

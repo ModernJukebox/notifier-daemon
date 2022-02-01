@@ -1,0 +1,9 @@
+{
+  "dsn": "mercure://localhost/notify?topic=%2Fexample%2Ftopic&topic=%2Fexample%2Ftopic%2Fsubtopic",
+  "authentication": {
+    "type": "bearer",
+    "token": "eyJhbGciOiJIUzI1NiJ9.eyJtZXJjdXJlIjp7InB1Ymxpc2giOlsiKiJdfX0.vhMwOaN5K68BTIhWokMLOeOJO4EPfT64brd8euJOA4M"
+  },
+  "tick": "4s",
+  "command": "date '+{\"timestamp\": \"%Y-%m-%d TIME: %H:%M:%S\"}' | jq -c"
+}
