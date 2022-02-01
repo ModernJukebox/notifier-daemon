@@ -13,7 +13,7 @@ jobs:
             packages: write
         env:
             REGISTRY: ghcr.io
-            IMAGE_NAME: ModernJukebox/NotifierDaemon
+            IMAGE_NAME: ModernJukebox/notifier-daemon
 
         steps:
             -   name: Checkout repository
